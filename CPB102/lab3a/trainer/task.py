@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
-import datareader
 
 FEATURES = [
     "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
@@ -20,8 +19,7 @@ FEATURES = [
 ]
 OBJECTIVE = ["fare_amount"]
 
-
-LEARNING_RATE = 0.0001
+LEARNING_RATE = 0.0005
 
 # Parse arguments
 parser = argparse.ArgumentParser()
@@ -46,18 +44,19 @@ if __name__ == "__main__":
     # Set log level
     tf.logging.set_verbosity(tf.logging.DEBUG)
     # Load dataset
-    # subprocess.call(["gsutil", "cp", "gs://cpb102demo1-ml/dataset/taxifare/*.csv", "/tmp/"])
-    df_train = datareader.create_data(1)
-    df_test = datareader.create_data(2)
+    # df_train = datareader.create_data(1)
+    # df_test = datareader.create_data(2)
+    subprocess.call(["gsutil", "cp", "gs://cpb102demo1-ml/dataset/taxifare/*.csv", "/tmp/"])
+    df_train = pd.read_csv("/tmp/taxi-feateng-train.csv")
+    df_test = pd.read_csv("/tmp/taxi-feateng-test.csv")
     x_train, t_train = df_train[FEATURES].values, df_train[OBJECTIVE].values
     x_test, t_test = df_test[FEATURES].values, df_test[OBJECTIVE].values
-    # x_train, t_train, x_test, t_test = datareader.create_data()
     # Build graph
     x_ph = tf.placeholder(tf.float32, shape=[None, x_train.shape[1]])
     t_ph = tf.placeholder(tf.float32, shape=[None, 1])
     outputs = inference(x_ph)
     loss = build_loss(t_ph, outputs)
-    optim = tf.train.ProximalGradientDescentOptimizer(learning_rate=LEARNING_RATE).minimize(loss)
+    optim = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE).minimize(loss)
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 

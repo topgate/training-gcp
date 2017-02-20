@@ -23,18 +23,10 @@ BUCKET_NAME=${PROJECT_ID}-ml
 
 ### データセットの準備
 
-公式のリポジトリから lab1a の手順で加工済みの csv ファイルをダウンロードします。
+学習用データの csv ファイルを Google Cloud Storage に移動させておきます。
 
 ```sh
-wget https://raw.githubusercontent.com/GoogleCloudPlatform/training-data-analyst/master/CPB102/lab1a/taxi-test.csv
-wget https://raw.githubusercontent.com/GoogleCloudPlatform/training-data-analyst/master/CPB102/lab1a/taxi-train.csv
-wget https://raw.githubusercontent.com/GoogleCloudPlatform/training-data-analyst/master/CPB102/lab1a/taxi-valid.csv
-```
-
-ダウンロードした csv ファイルを Google Cloud Storage に移動させておきます。
-
-```sh
-gsutil mv taxi-[a-zA-Z]*.csv gs://${BUCKET_NAME}/dataset/taxifare/
+gsutil cp data/taxi-[a-zA-Z]*.csv gs://${BUCKET_NAME}/dataset/taxifare/
 ```
 
 ### Job の実行

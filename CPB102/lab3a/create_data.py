@@ -71,54 +71,6 @@ def create_data(n):
     return df.dropna()
 
 
-def create_data2():
-    features = [
-        "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
-        # "dayofweek",
-        "hourofday",
-        "pickup_latitude", "pickup_longitude",
-        "dropoff_latitude", "dropoff_longitude",
-        "passenger_count",
-        "estimated_distance"
-    ]
-    objective = ["fare_amount"]
-    df_train = pd.io.gbq.read_gbq(
-        "SELECT * FROM [cpb102demo1:cpb102.taxi_feateng_train]",
-        project_id="cpb102demo1"
-    )
-    df_test = pd.io.gbq.read_gbq(
-        "SELECT * FROM [cpb102demo1:cpb102.taxi_feateng_valid]",
-        project_id="cpb102demo1"
-    )
-    df_train["estimated_distance"] = estimate_distance(df_train)
-    df_test["estimated_distance"] = estimate_distance(df_test)
-    df_train = df_train.dropna()
-    df_test = df_test.dropna()
-    # df = pd.concat([df_train, df_test])
-    # df_train.dropoff_longitude -= df.mean().dropoff_longitude
-    # df_test.dropoff_longitude -= df.mean().dropoff_longitude
-    # df_train.dropoff_latitude -= df.mean().dropoff_latitude
-    # df_test.dropoff_latitude -= df.mean().dropoff_latitude
-    # df_train.dropoff_longitude /= df.std().dropoff_longitude
-    # df_test.dropoff_longitude /= df.std().dropoff_longitude
-    # df_train.dropoff_latitude /= df.std().dropoff_latitude
-    # df_test.dropoff_latitude /= df.std().dropoff_latitude
-    # pickup
-    # df_train.pickup_longitude -= df.mean().pickup_longitude
-    # df_test.pickup_longitude -= df.mean().pickup_longitude
-    # df_train.pickup_latitude -= df.mean().pickup_latitude
-    # df_test.pickup_latitude -= df.mean().pickup_latitude
-    # df_train.pickup_longitude /= df.std().pickup_longitude
-    # df_test.pickup_longitude /= df.std().pickup_longitude
-    # df_train.pickup_latitude /= df.std().pickup_latitude
-    # df_test.pickup_latitude /= df.std().pickup_latitude
-    x_train = np.array(df_train[features])
-    t_train = np.array(df_train[objective])
-    x_test = np.array(df_test[features])
-    t_test = np.array(df_test[objective])
-    return x_train, t_train, x_test, t_test
-
-
 if __name__ == "__main__":
     df_train = create_data(1)
     df_test = create_data(2)
@@ -126,5 +78,5 @@ if __name__ == "__main__":
     print "Rate = ${0}/km".format(rate)
     print_rmse(df_train, rate, 'Train')
     print_rmse(df_test, rate, 'Test')
-    df_train[features+objective].to_csv("data/taxi-feateng-train.csv", index=False)
-    df_test[features+objective].to_csv("data/taxi-feateng-test.csv", index=False)
+    df_train[features+objective].to_csv("trainer/data/taxi-feateng-train.csv", index=False)
+    df_test[features+objective].to_csv("trainer/data/taxi-feateng-test.csv", index=False)
