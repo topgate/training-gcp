@@ -8,8 +8,8 @@ gcloud SDK がインストールされていればローカルで作業をする
 ### サンプルコードのダウンロード
 
 ```sh
-git clone https://github.com/topgate/cpb102.git
-cd lab3a
+git clone https://github.com/topgate/training-gcp.git
+cd CPB102/lab3a
 ```
 
 ### シェル変数の定義
