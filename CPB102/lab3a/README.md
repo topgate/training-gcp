@@ -18,7 +18,12 @@ cd CPB102/lab3a
 
 ```sh
 PROJECT_ID=`gcloud config list project --format "value(core.project)"`
-BUCKET_NAME=${PROJECT_ID}-ml
+```
+
+### Cloud Storage のバケット作成
+
+```sh
+gsutil mb -c regional -l us-central1 gs://${PROJECT_ID}-ml
 ```
 
 ### データセットの準備
