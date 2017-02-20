@@ -55,3 +55,11 @@ BigQueryを用いたビッグデータの分析を行う方法を学習するト
 ### Pull Request
 あなたは誤字脱字や、動かないコマンドのサンプルを見つけた場合、pull requestを送ることができます。
 pull requestはRepositoryのMemberによってレビューされ、Mergeされます。
+
+## Resource
+
+* GCP Training Official https://cloud.google.com/training/
+* Google Certification https://cloud.google.com/certification/
+* Google Group by Japan https://groups.google.com/a/topgate.co.jp/forum/#!forum/gcp-training-general
+
+あなたがトレーニングに関する情報を受け取りたい場合、 `gcp-training-general` に入るのがおすすめです。
