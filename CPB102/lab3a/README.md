@@ -9,7 +9,7 @@ gcloud SDK がインストールされていればローカルで作業をする
 
 ```sh
 git clone https://github.com/topgate/training-gcp.git
-cd CPB102/lab3a
+cd training-gcp/CPB102/lab3a
 ```
 
 ### シェル変数の定義
@@ -31,7 +31,7 @@ gsutil mb -c regional -l us-central1 gs://${PROJECT_ID}-ml
 学習用データの csv ファイルを Google Cloud Storage に移動させておきます。
 
 ```sh
-gsutil cp data/taxi-[a-zA-Z]*.csv gs://${BUCKET_NAME}/dataset/taxifare/
+gsutil cp data/taxi-[a-zA-Z]*.csv gs://${PROJECT_ID}-ml/dataset/taxifare/
 ```
 
 ### Job の実行
@@ -48,6 +48,7 @@ gcloud beta ml jobs submit training ${JOB_NAME} \
   --staging-bucket="gs://${PROJECT_ID}-ml" \
   --region=us-central1 \
   --config=config.yaml \
+  --async \
   -- \
   --output_path=gs://${PROJECT_ID}-ml/taxifare/${JOB_NAME}
 ```
