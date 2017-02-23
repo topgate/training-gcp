@@ -49,3 +49,11 @@ git clone https://github.com/GoogleCloudPlatform/training-data-analyst.git
 ```
 
 `training-data-analyst/CPB102` 以下に lab で使用するノートブックが入っています。
+
+### 接続が切れたり Cloud Shell を再起動した場合
+
+以下のコマンドで Datalab 用に作成したインスタンスに再接続できます。
+
+```
+datalab connect datalabvm
+```
