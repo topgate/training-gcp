@@ -60,7 +60,7 @@ gcloud beta ml jobs submit training ${JOB_NAME} \
 
 ```sh
 gcloud beta ml models create taxifare
-gcloud beta ml models versions create v1 --model taxifare --origin gs://${PROJECT_ID}-ml/taxifare/${JOB_NAME}/model
+gcloud beta ml versions create v1 --model taxifare --origin gs://${PROJECT_ID}-ml/taxifare/${JOB_NAME}/model --async
 ```
 
 ### モデルを使ってみる
