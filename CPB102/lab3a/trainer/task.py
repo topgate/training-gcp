@@ -44,8 +44,6 @@ if __name__ == "__main__":
     # Set log level
     tf.logging.set_verbosity(tf.logging.DEBUG)
     # Load dataset
-    # df_train = datareader.create_data(1)
-    # df_test = datareader.create_data(2)
     subprocess.call(["gsutil", "cp", "gs://cpb102demo1-ml/dataset/taxifare/*.csv", "/tmp/"])
     df_train = pd.read_csv("/tmp/taxi-feateng-train.csv")
     df_test = pd.read_csv("/tmp/taxi-feateng-test.csv")
