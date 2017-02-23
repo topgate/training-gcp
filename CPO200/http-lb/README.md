@@ -160,7 +160,7 @@ gcloud compute backend-services add-backend web-service \
 中身はnginxなので、特にvideo配信するようにはなってないサンプル
 
 ```
-gcloud compute instance-templates create "video-template" --machine-type "f1-micro" --network "default" --metadata "startup-script-url=gs://cpo200demo1.appspot.com/startup.sh" --tags "http-server" --image "/debian-cloud/debian-8-jessie-v20161027"
+gcloud compute instance-templates create "video-template" --machine-type "f1-micro" --network "default" --metadata "startup-script-url=gs://cpo200demo1.appspot.com/startup.sh" --tags "http-server" --image-family "nginx-image"
 ```
 
 #### video用 instance-group 作成
