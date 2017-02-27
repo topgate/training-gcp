@@ -8,6 +8,10 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
+PROJECT_ID = subprocess.check_output(
+    "gcloud config list project --format 'value(core.project)'",
+    shell=True
+).rstrip()
 
 FEATURES = [
     "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
