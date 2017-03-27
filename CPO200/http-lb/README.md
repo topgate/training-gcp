@@ -130,7 +130,7 @@ gcloud compute http-health-checks create basic-check
 /api を配信するbackend-serviceを作成
 
 ```
-gcloud compute backend-services create web-service --protocol HTTP --http-health-checks basic-check
+gcloud compute backend-services create web-service --protocol HTTP --http-health-checks basic-check --global
 ```
 
 #### api用 backend-serviceに、 api用 instance-groupを追加
@@ -143,7 +143,8 @@ gcloud compute backend-services add-backend web-service \
     --max-utilization 0.8 \
     --capacity-scaler 1 \
     --instance-group web-group-us-b \
-    --instance-group-zone us-central1-b
+    --instance-group-zone us-central1-b \
+    --global
 ```
 
 ```
@@ -152,7 +153,8 @@ gcloud compute backend-services add-backend web-service \
     --max-utilization 0.8 \
     --capacity-scaler 1 \
     --instance-group web-group-us-c \
-    --instance-group-zone us-central1-c
+    --instance-group-zone us-central1-c \
+    --global
 ```
 
 #### video用 instance-template 作成 
@@ -178,7 +180,7 @@ gcloud compute instance-groups managed create "video-group-us-c" --zone "us-cent
 #### video用 backend-service 作成
 
 ```
-gcloud compute backend-services create video-service --protocol HTTP --http-health-checks basic-check
+gcloud compute backend-services create video-service --protocol HTTP --http-health-checks basic-check --global
 ```
 
 #### video用 backend-serviceに、 video用 instance-groupを追加
@@ -189,7 +191,8 @@ gcloud compute backend-services add-backend video-service \
     --max-utilization 0.8 \
     --capacity-scaler 1 \
     --instance-group video-group-us-b \
-    --instance-group-zone us-central1-b
+    --instance-group-zone us-central1-b \
+    --global
 ```
 
 ```
@@ -198,7 +201,8 @@ gcloud compute backend-services add-backend video-service \
     --max-utilization 0.8 \
     --capacity-scaler 1 \
     --instance-group video-group-us-c \
-    --instance-group-zone us-central1-c
+    --instance-group-zone us-central1-c \
+    --global
 ```
 
 #### url-map 作成
