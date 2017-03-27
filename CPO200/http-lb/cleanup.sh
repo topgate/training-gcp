@@ -3,8 +3,8 @@
 yes | gcloud compute forwarding-rules delete http-rule --global
 yes | gcloud compute target-http-proxies delete web-proxy
 yes | gcloud compute url-maps delete web-map
-yes | gcloud compute backend-services delete web-service
-yes | gcloud compute backend-services delete video-service
+yes | gcloud compute backend-services delete web-service --global
+yes | gcloud compute backend-services delete video-service --global
 yes | gcloud compute http-health-checks delete basic-check
 yes | gcloud compute instance-groups managed delete "web-group-us-b" --zone "us-central1-b"
 yes | gcloud compute instance-groups managed delete "web-group-us-c" --zone "us-central1-c"
