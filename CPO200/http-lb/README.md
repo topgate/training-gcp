@@ -84,7 +84,7 @@ gcloud compute images create nginx-image-20161110v1 --family nginx-image --sourc
 ### HTTP LBの構築
 
 全コマンドを実行するshell
-https://github.com/topgate/cpo200-http-lb/blob/master/create.sh
+https://github.com/topgate/training-gcp/blob/master/CPO200/http-lb/create.sh
 
 #### firewall-rule 作成
 
@@ -261,7 +261,7 @@ gcloud compute firewall-rules create allow-http-lb-health-check \
 ```
 ## CleanUp
 
-[cleanup.sh](https://github.com/topgate/cpo200-http-lb/blob/master/cleanup.sh)
+[cleanup.sh](https://github.com/topgate/training-gcp/blob/master/CPO200/http-lb/cleanup.sh)
 
 ```
 yes | gcloud compute forwarding-rules delete http-rule --global
