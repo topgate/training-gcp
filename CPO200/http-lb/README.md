@@ -250,12 +250,12 @@ gcloud compute backend-services update web-service --enable-cdn
 
 ## http-lb helth checkのためのfirewall-rule 作成 (Option)
 
-HTTP(S) LBのヘルスチェックは130.211.0.0/22から来る 
+HTTP(S) LBのヘルスチェックは130.211.0.0/22, 35.191.0.0/16から来る 
 tcp:80を0.0.0.0/0で許可しない場合に設定する
 
 ```
-gcloud compute firewall-rules create allow-130-211-0-0-22 \
-    --source-ranges 130.211.0.0/22 \
+gcloud compute firewall-rules create allow-http-lb-health-check \
+    --source-ranges 130.211.0.0/22,35.191.0.0/16 \
     --target-tags http-server \
     --allow tcp:80
 ```
@@ -279,4 +279,5 @@ yes | gcloud compute addresses delete lb-ip-cr --global
 yes | gcloud compute snapshots delete instance-image-snapshot
 yes | gcloud compute disks delete nginx-template --zone us-central1-b
 yes | gcloud compute instances delete instance-image --zone us-central1-b
+yes | gcloud compute firewall-rules delete allow-http-lb-health-check
 ```
