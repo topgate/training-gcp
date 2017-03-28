@@ -78,6 +78,18 @@ gcloud compute instances create www4 www5 --zone "us-central1-b" --tags "http-se
 gcloud compute target-pools add-instances reserve-pool --instances www4,www5 --zone "us-central1-b"
 ```
 
+### network-lb helth checkのためのfirewall-rule 作成 (Option)
+
+Network LBのヘルスチェックは209.85.152.0/22, 209.85.204.0/22, 35.191.0.0/16から来る 
+tcp:80を0.0.0.0/0で許可しない場合に設定する
+
+```
+gcloud compute firewall-rules create allow-http-lb-health-check \
+    --source-ranges 209.85.152.0/22,209.85.204.0/22,35.191.0.0/16 \
+    --target-tags http-server \
+    --allow tcp:80
+```
+
 ### CleanUp
 
 ```
