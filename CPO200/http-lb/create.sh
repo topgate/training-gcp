@@ -30,7 +30,7 @@ gcloud compute backend-services add-backend web-service \
     --instance-group-zone us-central1-c \
     --global
 
-gcloud compute instance-templates create "video-template" --machine-type "f1-micro" --network "default" --metadata "startup-script-url=gs://cpo200demo1.appspot.com/startup.sh" --tags "http-server" --image "/debian-cloud/debian-8-jessie-v20161027"
+gcloud compute instance-templates create "video-template" --machine-type "f1-micro" --network "default" --metadata "startup-script-url=gs://cpo200demo1.appspot.com/startup.sh" --tags "http-server" --image-family "nginx-image"
 
 gcloud compute instance-groups managed create "video-group-us-b" --zone "us-central1-b" --base-instance-name "video-group-us-b" --template "web-template" --size "2"
 gcloud compute instance-groups managed create "video-group-us-c" --zone "us-central1-c" --base-instance-name "video-group-us-b" --template "web-template" --size "2"
@@ -62,4 +62,4 @@ gcloud compute url-maps add-path-matcher web-map \
 
 gcloud compute target-http-proxies create web-proxy --url-map web-map
 
-gcloud compute backend-services update web-service --enable-cdn
+gcloud compute backend-services update web-service --enable-cdn --global
