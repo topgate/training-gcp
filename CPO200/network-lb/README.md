@@ -175,6 +175,10 @@ gcloud compute forwarding-rules create www-rule --region "us-central1" --port-ra
 
 ![networklb_autoscaler2](https://storage.googleapis.com/cpo200demo1.appspot.com/networklb_autoscaler2.png "networklb_autoscaler2")
 
+## Resources
+
+* [オートスケーラーの判断についての理解](https://cloud.google.com/compute/docs/autoscaler/understanding-autoscaler-decisions)
+* [異常なインスタンスの取り扱い](https://cloud.google.com/compute/docs/load-balancing/health-checks#handling_unhealthy_instances)
 ## CleanUp
 
 ```
