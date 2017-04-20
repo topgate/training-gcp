@@ -91,3 +91,7 @@ ENV/
 .DS_Store
 .idea
 *.dat
+
+tensorflow/MNIST_data
+tensorflow/mnist_model
+tensorflow/iris_model
