@@ -4,12 +4,6 @@
 
 まずは Cloud Shell から Datalab を起動します。
 
-### Datalab コマンドラインツールのインストール
-
-```
-sudo gcloud components install datalab
-```
-
 ### Datalab 用のインスタンス作成
 
 ```
