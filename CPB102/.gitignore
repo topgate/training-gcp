@@ -95,3 +95,4 @@ ENV/
 tensorflow/MNIST_data
 tensorflow/mnist_model
 tensorflow/iris_model
+mlengine/train/MNIST_data
