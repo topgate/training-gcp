@@ -3,13 +3,23 @@
 以下の作業は Cloud Shell 上で行うことを想定しています。
 gcloud SDK がインストールされていればローカルで作業をすることも可能です。
 
-## Job 実行までの最短手順
+## ジョブ実行までの最短手順
 
 ### サンプルコードのダウンロード
 
 ```sh
 git clone https://github.com/topgate/training-gcp.git
-cd training-gcp/CPB102/lab3a
+training-gcp/CPB102/mlengine/train
+```
+
+以下のようなディレクトリ構成になっています。
+
+```
+├── README.md
+├── config.yaml      # ML Engine の設定ファイル
+└── trainer
+    ├── __init__.py  # 中身は空で良い
+    └── task.py      # ML Engine で実行して欲しいスクリプト
 ```
 
 ### シェル変数の定義
@@ -21,6 +31,8 @@ PROJECT_ID=`gcloud config list project --format "value(core.project)"`
 ```
 
 ### Cloud Storage のバケット作成
+
+学習済みのモデルなどを保存するために Cloud Storage のバケットを用意しておきます。
 
 ```sh
 gsutil mb -c regional -l us-central1 gs://${PROJECT_ID}-ml
@@ -41,8 +53,17 @@ gcloud ml-engine jobs submit training ${JOB_NAME} \
   --region=us-central1 \
   --config=config.yaml \
   -- \
-  --output_path=gs://${PROJECT_ID}-ml/mnist/${JOB_NAME}
+  --job-dir=gs://${PROJECT_ID}-ml/mnist/${JOB_NAME}
 ```
+
+## 学習の様子
+
+コンソール画面からジョブ一覧やログを見ることができます。
+ログを見ると、計算に GPU が使われていることを確認できるはずです。
+TensorFlow では使用するデバイスを指定しなかった場合、優先的に GPU を使用してくれる仕組みになっています。
+
+<img src="img/device_mapping_log.jpg" width=512px>
+
 
 ## 付録
 
@@ -58,12 +79,13 @@ python -m trainer.task
 
 Cloud ML Engine とほぼ同じ環境で動かしたい場合は `gcloud ml-engine train local` コマンドが用意されています。
 
-```
+```sh
+PROJECT_ID=`gcloud config list project --format "value(core.project)"`
+touch .dummy && gsutil mv .dummy gs://${PROJECT_ID}-ml/local/model/
+
 gcloud ml-engine local train --module-name trainer.task \
                              --package-path trainer \
-                             --distributed \
-                             --parameter-server-count 1 \
-                             --worker-count 1
+                             --job-dir gs://${PROJECT_ID}-ml/local
 ```
 
 クラスタ上で分散処理を想定してコードを書いている場合でも、擬似的にクラスタが存在しているという体で動作してくれます。

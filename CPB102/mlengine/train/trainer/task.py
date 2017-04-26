@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import argparse
+import json
 import numpy as np
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
-
 
 
 def inference(x_ph):
@@ -23,6 +24,12 @@ def main():
     print(tf.__version__)
     # Set log level
     tf.logging.set_verbosity(tf.logging.INFO)
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--job-dir", type=str)
+    args, unknown_args = parser.parse_known_args()
+    tf.logging.info(args)
+    tf.logging.info(unknown_args)
     # Load data set
     mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
     # Create placeholders
@@ -49,6 +56,35 @@ def main():
                 tf.logging.info("Iteration: {0} Training Loss: {1} Test Loss: {2}".format(i, train_loss, test_loss))
         test_accuracy = sess.run(accuracy, feed_dict={x_ph: mnist.test.images, y_ph: mnist.test.labels})
         tf.logging.info("Accuracy: {}".format(test_accuracy))
+        # Setting for deployment on ML Engine
+        input_key = tf.placeholder(tf.int64, [None, ], name="key")
+        output_key = tf.identity(input_key)
+        input_signatures = {
+            "key": tf.saved_model.utils.build_tensor_info(input_key),
+            "x": tf.saved_model.utils.build_tensor_info(x_ph)
+        }
+        output_signatures = {
+            "key": tf.saved_model.utils.build_tensor_info(output_key),
+            "score": tf.saved_model.utils.build_tensor_info(y)
+        }
+        predict_signature_def = tf.saved_model.signature_def_utils.build_signature_def(
+            input_signatures,
+            output_signatures,
+            tf.saved_model.signature_constants.PREDICT_METHOD_NAME
+        )
+        # Save model
+        builder = tf.saved_model.builder.SavedModelBuilder("{}".format(args.job_dir))
+        builder.add_meta_graph_and_variables(
+            sess,
+            [tf.saved_model.tag_constants.SERVING],
+            signature_def_map={
+                tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY: predict_signature_def
+            },
+            assets_collection=tf.get_collection(tf.GraphKeys.ASSET_FILEPATHS)
+        )
+        builder.save()
+        tf.logging.info(tf.get_collection(tf.GraphKeys.ASSET_FILEPATHS))
+
 
 if __name__ == "__main__":
     main()
