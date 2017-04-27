@@ -1,2 +1,2 @@
 trainingInput:
-  scaleTier: BASIC
+  scaleTier: BASIC_GPU

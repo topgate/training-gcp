@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 import numpy as np
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
@@ -20,10 +21,11 @@ def build_loss(y_ph, y):
 
 
 def main():
-    # Show TensorFlow version
-    print(tf.__version__)
     # Set log level
-    tf.logging.set_verbosity(tf.logging.INFO)
+    tf.logging.set_verbosity(tf.logging.DEBUG)
+    # Show various infomation
+    tf.logging.debug(tf.__version__)
+    tf.logging.debug(os.environ.get("TF_CONFIG"))
     # Parse arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--job-dir", type=str)
@@ -56,12 +58,12 @@ def main():
                 tf.logging.info("Iteration: {0} Training Loss: {1} Test Loss: {2}".format(i, train_loss, test_loss))
         test_accuracy = sess.run(accuracy, feed_dict={x_ph: mnist.test.images, y_ph: mnist.test.labels})
         tf.logging.info("Accuracy: {}".format(test_accuracy))
-        # Setting for deployment on ML Engine
+        # Save model for deployment on ML Engine
         input_key = tf.placeholder(tf.int64, [None, ], name="key")
         output_key = tf.identity(input_key)
         input_signatures = {
             "key": tf.saved_model.utils.build_tensor_info(input_key),
-            "x": tf.saved_model.utils.build_tensor_info(x_ph)
+            "image": tf.saved_model.utils.build_tensor_info(x_ph)
         }
         output_signatures = {
             "key": tf.saved_model.utils.build_tensor_info(output_key),
@@ -72,8 +74,7 @@ def main():
             output_signatures,
             tf.saved_model.signature_constants.PREDICT_METHOD_NAME
         )
-        # Save model
-        builder = tf.saved_model.builder.SavedModelBuilder("{}".format(args.job_dir))
+        builder = tf.saved_model.builder.SavedModelBuilder(os.path.join(args.job_dir, "model"))
         builder.add_meta_graph_and_variables(
             sess,
             [tf.saved_model.tag_constants.SERVING],
@@ -83,7 +84,6 @@ def main():
             assets_collection=tf.get_collection(tf.GraphKeys.ASSET_FILEPATHS)
         )
         builder.save()
-        tf.logging.info(tf.get_collection(tf.GraphKeys.ASSET_FILEPATHS))
 
 
 if __name__ == "__main__":

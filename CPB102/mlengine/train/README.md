@@ -1,7 +1,7 @@
 # Lab: Training on Cloud ML Engine
 
 以下の作業は Cloud Shell 上で行うことを想定しています。
-gcloud SDK がインストールされていればローカルで作業をすることも可能です。
+gcloud SDK がインストールされていればローカル環境で作業をすることも可能です。
 
 ## ジョブ実行までの最短手順
 
@@ -15,16 +15,15 @@ training-gcp/CPB102/mlengine/train
 以下のようなディレクトリ構成になっています。
 
 ```
-├── README.md
 ├── config.yaml      # ML Engine の設定ファイル
 └── trainer
     ├── __init__.py  # 中身は空で良い
     └── task.py      # ML Engine で実行して欲しいスクリプト
 ```
 
-### シェル変数の定義
+### シェル変数の準備
 
-後々使い回すために、プロジェクト ID と作業用の bucket 名をシェル変数に入れておきましょう。
+後々使い回すために、プロジェクト ID と作業用のバケット名をシェル変数に入れておきましょう。
 
 ```sh
 PROJECT_ID=`gcloud config list project --format "value(core.project)"`
@@ -38,13 +37,13 @@ PROJECT_ID=`gcloud config list project --format "value(core.project)"`
 gsutil mb -c regional -l us-central1 gs://${PROJECT_ID}-ml
 ```
 
-### Cloud ML Engine 上で実行
+### Cloud ML Engine 上での学習
 
 Job 名はプロジェクト内で一意でなければならないので、日付や時間の情報を入れて作成するのがおすすめです。
 
 ```sh
 JOB_NAME="mnist`date '+%Y%m%d%H%M%S'`"
-touch .dummy && gsutil mv .dummy gs://${PROJECT_ID}-ml/mnist/${JOB_NAME}/model/
+# touch .dummy && gsutil mv .dummy gs://${PROJECT_ID}-ml/mnist/${JOB_NAME}/model/
 
 gcloud ml-engine jobs submit training ${JOB_NAME} \
   --package-path=trainer \
