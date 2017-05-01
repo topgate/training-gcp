@@ -39,10 +39,10 @@ You can now connect to Datalab at http://localhost:8081/
 
 ```sh
 %bash
-git clone https://github.com/GoogleCloudPlatform/training-data-analyst.git
+git clone https://github.com/topgate/training-gcp
 ```
 
-`training-data-analyst/CPB102` 以下に lab で使用するノートブックが入っています。
+`training-gcp/CPB102` 以下に lab で使用するノートブックが入っています。
 
 ### 接続が切れたり Cloud Shell を再起動した場合
 
