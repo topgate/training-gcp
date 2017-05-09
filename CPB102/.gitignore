@@ -95,4 +95,5 @@ ENV/
 tensorflow/MNIST_data
 tensorflow/mnist_model
 tensorflow/iris_model
+tensorflow/saver_sample
 mlengine/train/MNIST_data
