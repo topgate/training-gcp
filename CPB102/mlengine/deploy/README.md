@@ -16,5 +16,6 @@ gcloud ml-engine versions create v1 --model mnist --origin gs://${PROJECT_ID}-ml
 ## モデルを使ってみる
 
 ```sh
+cd ~/training-gcp/CPB102/mlengine/deploy
 gcloud ml-engine predict --model=mnist --json-instances=sample.json
 ```
