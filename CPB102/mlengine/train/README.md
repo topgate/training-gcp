@@ -9,7 +9,7 @@ gcloud SDK がインストールされていればローカル環境で作業を
 
 ```sh
 git clone https://github.com/topgate/training-gcp.git
-training-gcp/CPB102/mlengine/train
+cd training-gcp/CPB102/mlengine/train
 ```
 
 以下のようなディレクトリ構成になっています。
