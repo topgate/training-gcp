@@ -10,19 +10,18 @@
 datalab create --zone us-central1-b datalabvm
 ```
 
-以下のように `You can now connect to Datalab at http://localhost:8081/` というメッセージが出力されるまで待ちます。
+以下のように接続可能というメッセージが出力されるまで待ちます。
 
 ```
 shuhei_fujiwara@cpb102demo1:~$ datalab create --zone us-central1-b datalabvm
-Creating the disk datalabvm-pd
 Creating the instance datalabvm
 Created [https://www.googleapis.com/compute/v1/projects/cpb102demo1/zones/us-central1-b/instances/datalabvm].
-NAME        ZONE           MACHINE_TYPE   PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP     STATUS
-datalabvm  us-central1-b  n1-standard-1               10.128.0.2   104.198.38.213  RUNNING
-Connecting to datalabvm
-Ensuring that datalabvm can be connected to via SSH
+Connecting to datalabvm.
+This will create an SSH tunnel and may prompt you to create an rsa key pair.
 Waiting for Datalab to be reachable at http://localhost:8081/
-You can now connect to Datalab at http://localhost:8081/
+
+The connection to Datalab is now open and will remain until this command is killed.
+Click on the *Web Preview* (up-arrow button at top-left), select *port 8081*, and start using Datalab.
 ```
 
 ### Datalab の起動
@@ -31,11 +30,7 @@ You can now connect to Datalab at http://localhost:8081/
 
 ### 公式リポジトリのダウンロード
 
-まずは Datalab 上で home ディレクトリに移動します。
-
-<img src="img/datalab_home.jpg" width=512px>
-
-次に新規ノートブックを作成して、ノートブック上で以下のコマンドを実行します。
+新規ノートブックを作成して、ノートブック上で以下のコマンドを実行します。
 
 ```sh
 %bash
