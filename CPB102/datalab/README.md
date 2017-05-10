@@ -7,7 +7,11 @@
 ### Datalab 用のインスタンス作成
 
 ```
-datalab create --zone us-central1-b datalabvm
+INSTANCE_NAME=datalabvm-${USER//_/}
+```
+
+```
+datalab create --zone us-central1-b ${INSTANCE_NAME}
 ```
 
 以下のように接続可能というメッセージが出力されるまで待ちます。
@@ -44,5 +48,5 @@ git clone https://github.com/topgate/training-gcp
 以下のコマンドで Datalab 用に作成したインスタンスに再接続できます。
 
 ```
-datalab connect datalabvm
+datalab connect ${INSTANCE_NAME}
 ```
