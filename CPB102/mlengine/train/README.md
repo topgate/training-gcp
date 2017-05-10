@@ -27,6 +27,7 @@ cd training-gcp/CPB102/mlengine/train
 
 ```sh
 PROJECT_ID=`gcloud config list project --format "value(core.project)"`
+BUCKET_NAME=${PROJECT_ID}-${USER//_/}-ml
 ```
 
 ### Cloud Storage のバケット作成
@@ -34,7 +35,7 @@ PROJECT_ID=`gcloud config list project --format "value(core.project)"`
 学習済みのモデルなどを保存するために Cloud Storage のバケットを用意しておきます。
 
 ```sh
-gsutil mb -c regional -l us-central1 gs://${PROJECT_ID}-ml
+gsutil mb -c regional -l us-central1 gs://${BUCKET_NAME}
 ```
 
 ### Cloud ML Engine 上での学習
@@ -47,11 +48,11 @@ JOB_NAME="mnist`date '+%Y%m%d%H%M%S'`"
 gcloud ml-engine jobs submit training ${JOB_NAME} \
   --package-path=trainer \
   --module-name=trainer.task \
-  --staging-bucket="gs://${PROJECT_ID}-ml" \
+  --staging-bucket="gs://${BUCKET_NAME}" \
   --region=us-central1 \
   --config=config.yaml \
   -- \
-  --job-dir=gs://${PROJECT_ID}-ml/mnist/${JOB_NAME}
+  --job-dir=gs://${BUCKET_NAME}/mnist/${JOB_NAME}
 ```
 
 ## 学習の様子
@@ -80,7 +81,7 @@ Cloud ML Engine とほぼ同じ環境で動かしたい場合は `gcloud ml-engi
 ```sh
 gcloud ml-engine local train --module-name trainer.task \
                              --package-path trainer \
-                             --job-dir gs://${PROJECT_ID}-ml/local
+                             --job-dir gs://${BUCKET_NAME}/local
 ```
 
 クラスタ上で分散処理を想定してコードを書いている場合でも、擬似的にクラスタが存在しているという体で動作してくれます。
