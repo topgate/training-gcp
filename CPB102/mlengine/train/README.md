@@ -9,7 +9,7 @@ gcloud SDK がインストールされていればローカル環境で作業を
 
 ```sh
 git clone https://github.com/topgate/training-gcp.git
-training-gcp/CPB102/mlengine/train
+cd training-gcp/CPB102/mlengine/train
 ```
 
 以下のようなディレクトリ構成になっています。
@@ -43,7 +43,6 @@ Job 名はプロジェクト内で一意でなければならないので、日�
 
 ```sh
 JOB_NAME="mnist`date '+%Y%m%d%H%M%S'`"
-# touch .dummy && gsutil mv .dummy gs://${PROJECT_ID}-ml/mnist/${JOB_NAME}/model/
 
 gcloud ml-engine jobs submit training ${JOB_NAME} \
   --package-path=trainer \
@@ -73,15 +72,12 @@ TensorFlow や gcloud SDK が手元の環境に整っている場合、ローカ
 単純に Python のスクリプトを動かす場合は以下のコマンドで実行することができます。
 
 ```
-python -m trainer.task
+python -m trainer.task --job-dir=mnist_local
 ```
 
 Cloud ML Engine とほぼ同じ環境で動かしたい場合は `gcloud ml-engine train local` コマンドが用意されています。
 
 ```sh
-PROJECT_ID=`gcloud config list project --format "value(core.project)"`
-touch .dummy && gsutil mv .dummy gs://${PROJECT_ID}-ml/local/model/
-
 gcloud ml-engine local train --module-name trainer.task \
                              --package-path trainer \
                              --job-dir gs://${PROJECT_ID}-ml/local
