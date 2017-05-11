@@ -25,7 +25,7 @@ def build_loss(y_ph, y):
 def main():
     # Parse arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model-dir", type=str)
+    parser.add_argument("--dir", type=str)
     args, unknown_args = parser.parse_known_args()
 
     # Get ML Engine config from environment variable
@@ -66,7 +66,7 @@ def main():
             train_op = tf.train.GradientDescentOptimizer(1e-1).minimize(cross_entropy)
             init_op = tf.global_variables_initializer()
             if tf_conf["task"]["type"] == "master":
-                tf.summary.FileWriter(logdir="mnist_summary", graph=g)
+                tf.summary.FileWriter(logdir=os.path.join(args.dir, "summary"), graph=g)
 
     # Start session
     with tf.Session(
@@ -101,7 +101,7 @@ def main():
                 output_signatures,
                 tf.saved_model.signature_constants.PREDICT_METHOD_NAME
             )
-            builder = tf.saved_model.builder.SavedModelBuilder(os.path.join(args.model_dir, "model"))
+            builder = tf.saved_model.builder.SavedModelBuilder(os.path.join(args.dir, "model"))
             builder.add_meta_graph_and_variables(
                 sess,
                 [tf.saved_model.tag_constants.SERVING],

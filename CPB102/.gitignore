@@ -19,6 +19,8 @@ ENV/
 *.dat
 MNIST_data
 mnist_model
+model
 mnist_summary
+summary
 
 tensorflow/saver_sample
