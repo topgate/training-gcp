@@ -8,14 +8,17 @@ from tensorflow.examples.tutorials.mnist import input_data
 
 
 def inference(x_ph):
-    hidden = tf.layers.dense(x_ph, 20)
-    logits = tf.layers.dense(hidden, 10)
-    y = tf.nn.softmax(logits)
+    with tf.variable_scope("hidden"):
+        hidden = tf.layers.dense(x_ph, 20)
+    with tf.variable_scope("output"):
+        logits = tf.layers.dense(hidden, 10)
+        y = tf.nn.softmax(logits)
     return y
 
 
 def build_loss(y_ph, y):
-    cross_entropy = -tf.reduce_mean(y_ph * tf.log(y))
+    with tf.name_scope("loss"):
+        cross_entropy = -tf.reduce_mean(y_ph * tf.log(y))
     return cross_entropy
 
 
@@ -35,7 +38,6 @@ def main():
 
     # Parameter server
     if tf_conf["task"]["type"] == "ps":
-        print("SERVER JOIN")
         server.join()
 
     # Create device function
@@ -58,10 +60,13 @@ def main():
             # Build loss graph
             cross_entropy = build_loss(y_ph, y)
             # Build other graph
-            correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_ph, 1))
-            accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+            with tf.name_scope("accuracy"):
+                correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_ph, 1))
+                accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
             train_op = tf.train.GradientDescentOptimizer(1e-1).minimize(cross_entropy)
             init_op = tf.global_variables_initializer()
+            if tf_conf["task"]["type"] == "master":
+                tf.summary.FileWriter(logdir="mnist_summary", graph=g)
 
     # Start session
     with tf.Session(
@@ -79,7 +84,7 @@ def main():
                 tf.logging.info("Iteration: {0} Training Loss: {1} Test Loss: {2}".format(i, train_loss, test_loss))
         test_accuracy = sess.run(accuracy, feed_dict={x_ph: mnist.test.images, y_ph: mnist.test.labels})
         tf.logging.info("Accuracy: {}".format(test_accuracy))
-        # Save model for deployment on ML Engine
+        # Only master save model for deployment on ML Engine
         if tf_conf["task"]["type"] == "master":
             input_key = tf.placeholder(tf.int64, [None, ], name="key")
             output_key = tf.identity(input_key)
