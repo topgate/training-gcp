@@ -29,7 +29,7 @@ data = {
 }
 req = ml.projects().predict(
     body=data,
-    name="projects/{0}/models/{1}/versions/v1".format(PROJECT_NAME, MODEL_NAME)
+    name="projects/{0}/models/{1}".format(PROJECT_NAME, MODEL_NAME)
 )
 res = req.execute()
 print(res)
