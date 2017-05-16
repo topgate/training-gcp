@@ -11,7 +11,7 @@ INSTANCE_NAME=datalabvm-${USER//_/}
 ```
 
 ```
-datalab create --zone us-central1-b ${INSTANCE_NAME}
+datalab create ${INSTANCE_NAME} --zone us-central1-b --no-backups 
 ```
 
 以下のように接続可能というメッセージが出力されるまで待ちます。
