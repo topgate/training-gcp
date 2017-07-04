@@ -71,6 +71,8 @@ https://github.com/topgate/training-gcp/tree/master/CPO200/projects を参考に
 ### IAM設定
 Compute EngineのService AccountがOther ProjectをOther ProjectのIAMにProject Viewerとして追加する
 
+![IAM設定スクリーンショット](https://github.com/topgate/training-gcp/blob/master/CPO200/authorization/IAM_-_cpo200demo1-dev.png "IAM設定スクリーンショット")
+
 ## Other Projectにあとで確認するためのInstanceを作成
 
 ```
