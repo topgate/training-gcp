@@ -161,6 +161,13 @@ Updated [https://www.googleapis.com/compute/v1/projects/cpo200demo1/zones/us-cen
 ```
 
 ```
+# Diskの状態をきれいに保つためにシャットダウンする
+gcloud compute instances stop sample --zone us-central1-b
+
+Updated [https://www.googleapis.com/compute/v1/projects/cpo200demo1/zones/us-central1-b/instances/sample].
+```
+
+```
 gcloud compute instances delete sample --zone us-central1-b
 
 Deleted [https://www.googleapis.com/compute/v1/projects/cpo200demo1/zones/us-central1-b/instances/sample].
