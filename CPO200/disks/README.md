@@ -219,7 +219,7 @@ image-family `sample-image` に新しいversionのimageを作成してみます
 ```
 # sshで接続してv2用であることが分かるようにファイルを置いておく
 
-gcloud compute ssh sample --zone us-central1-b
+gcloud compute ssh sample-20160926v1 --zone us-central1-b
 
 touch v2.txt
 ```
