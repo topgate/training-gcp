@@ -45,15 +45,15 @@ Cloud Loggingは最近実行されたAudit Logを見るには便利ですが、�
 ```
 #standardSQL
 SELECT
-  protopayload_google_cloud_audit_auditlog.resourceName,
-  protopayload_google_cloud_audit_auditlog.methodName,
-  protopayload_google_cloud_audit_auditlog.authenticationInfo.principalEmail,
+  protopayload_auditlog.resourceName,
+  protopayload_auditlog.methodName,
+  protopayload_auditlog.authenticationInfo.principalEmail,
   severity,
   timestamp
 FROM
   `gce_instance_auditlog.cloudaudit_googleapis_com_activity_*`
 WHERE
-  protopayload_google_cloud_audit_auditlog.resourceName LIKE "%instances/instance-1"
+  protopayload_auditlog.resourceName LIKE "%instances/instance-1"
   AND _TABLE_SUFFIX BETWEEN FORMAT_DATE("%Y%m%d",
     DATE_SUB(CURRENT_DATE(),
       INTERVAL 7 DAY))
@@ -70,17 +70,17 @@ ORDER BY
 ```
 #standardSQL
 SELECT
-  protopayload_google_cloud_audit_auditlog.resourceName,
-  protopayload_google_cloud_audit_auditlog.methodName,
-  protopayload_google_cloud_audit_auditlog.authenticationInfo.principalEmail,
-  protopayload_google_cloud_audit_auditlog.request_compute_googleapis_com_compute_instances_settags.tags,
+  protopayload_auditlog.resourceName,
+  protopayload_auditlog.methodName,
+  protopayload_auditlog.authenticationInfo.principalEmail,
+  protopayload_auditlog.request_instances_settags.tags,
   severity,
   timestamp
 FROM
   `gce_instance_auditlog.cloudaudit_googleapis_com_activity_*`
 WHERE
-  protopayload_google_cloud_audit_auditlog.methodName = "v1.compute.instances.setTags"
-  AND "ssh-server" IN UNNEST(protopayload_google_cloud_audit_auditlog.request_compute_googleapis_com_compute_instances_settags.tags)
+  protopayload_auditlog.methodName = "v1.compute.instances.setTags"
+  AND "ssh-server" IN UNNEST(protopayload_auditlog.request_instances_settags.tags)
   AND _TABLE_SUFFIX BETWEEN FORMAT_DATE("%Y%m%d",
     DATE_SUB(CURRENT_DATE(),
       INTERVAL 7 DAY))
