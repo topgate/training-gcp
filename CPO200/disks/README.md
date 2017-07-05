@@ -130,8 +130,7 @@ tmpfs             872664      0    872664   0% /sys/fs/cgroup
 このままではInstanceを再起動した時にmountが外れてしまうので、自動的にmountされるように設定しておきます。
 
 ```
-echo UUID=`sudo blkid -s UUID -o value /dev/disk/by-id/google-additional-disk` /mnt/disks/additional-disk ext4 discard,defaults 1 1 | sudo tee -a /etc/fstab
-UUID=393d9fa9-9ab0-43ea-a80b-dbb59c01fd0d /mnt/disks/additional-disk ext4 discard,defaults 1 1
+echo UUID=`sudo blkid -s UUID -o value /dev/disk/by-id/google-additional-disk` /mnt/disks/additional-disk ext4 discard,defaults,nofail 0 2 | sudo tee -a /etc/fstab
 ```
 
 ## Custom Imageの利用
