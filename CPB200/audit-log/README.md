@@ -48,27 +48,27 @@ Cloud Loggingは最近実行されたAudit Logを見るには便利ですが、�
 これで、Audit LogがBigQueryに自動的に入ってくるようになりました。
 
 以下のクエリを実行してみます。
-このクエリは直近7日間で、ユーザ毎にクエリを実行したバイト数と回数を集計するクエリです。
+このクエリは直近7日間で、ユーザ毎にクエリを実行した回数と料金を集計するクエリです。
 
 ```
+#standardSQL
 SELECT
-  protopayload_google_cloud_audit_auditlog.authenticationInfo.principalEmail User,
-  ROUND((total_bytes*5)/1000000000000, 2) Total_Cost_For_User,
-  Query_Count
-FROM (
-  SELECT
-    protopayload_google_cloud_audit_auditlog.authenticationInfo.principalEmail,
-    SUM(protopayload_google_cloud_audit_auditlog.servicedata_google_cloud_bigquery_logging_v1_auditdata.jobCompletedEvent.job.jobStatistics.totalBilledBytes) AS total_bytes,
-    COUNT(protopayload_google_cloud_audit_auditlog.authenticationInfo.principalEmail) AS query_count,
-  FROM
-    TABLE_DATE_RANGE(bigquery.cloudaudit_googleapis_com_data_access_, DATE_ADD(CURRENT_TIMESTAMP(), -7, 'DAY'), CURRENT_TIMESTAMP())
-  WHERE
-    protopayload_google_cloud_audit_auditlog.servicedata_google_cloud_bigquery_logging_v1_auditdata.jobCompletedEvent.eventName = 'query_job_completed'
-  GROUP BY
-    protopayload_google_cloud_audit_auditlog.authenticationInfo.principalEmail
-    )
+  protopayload_auditlog.authenticationInfo.principalEmail AS User,
+  SUM(ROUND((( protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.job.jobStatistics.totalBilledBytes *(5* protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.job.jobStatistics.billingTier))/1000000000000),2)) Cost_In_Dollars,
+  COUNT(1) As Count 
+FROM
+  `bigquery.cloudaudit_googleapis_com_data_access_*`
+WHERE
+  protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.eventName = 'query_job_completed'
+  AND _TABLE_SUFFIX BETWEEN FORMAT_DATE("%Y%m%d",
+    DATE_SUB(CURRENT_DATE(),
+      INTERVAL 7 DAY))
+  AND FORMAT_DATE("%Y%m%d",
+    CURRENT_DATE())
+GROUP BY
+  1
 ORDER BY
-  2 DESC
+  Cost_In_Dollars DESC
 ```
 
 ## Step 4
