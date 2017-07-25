@@ -104,13 +104,22 @@ ORDER BY
 ```
 #standardSQL
 SELECT
-  protopayload_google_cloud_audit_auditlog.authenticationInfo.principalEmail AS User,
-  protopayload_google_cloud_audit_auditlog.servicedata_google_cloud_bigquery_logging_v1_auditdata.jobCompletedEvent.job.jobConfiguration.query.query
+  protopayload_auditlog.authenticationInfo.principalEmail AS User,
+  protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.job.jobStatistics.billingTier AS billingTier,
+  protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.job.jobStatistics.totalBilledBytes AS totalBilledBytes,
+  ROUND((( protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.job.jobStatistics.totalBilledBytes *(5* protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.job.jobStatistics.billingTier))/1000000000000),2) Cost_In_Dollars,
+  protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.job.jobConfiguration.query.query
 FROM
   `bigquery.cloudaudit_googleapis_com_data_access_*`
 WHERE
-  _TABLE_SUFFIX BETWEEN FORMAT_DATE("%Y%m%d", DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY))
-  AND FORMAT_DATE("%Y%m%d", CURRENT_DATE())
-  AND protopayload_google_cloud_audit_auditlog.servicedata_google_cloud_bigquery_logging_v1_auditdata.jobCompletedEvent.eventName = 'query_job_completed'
-  AND REGEXP_CONTAINS(LOWER(protopayload_google_cloud_audit_auditlog.servicedata_google_cloud_bigquery_logging_v1_auditdata.jobCompletedEvent.job.jobConfiguration.query.query), r'^select \*')
+  protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.eventName = 'query_job_completed'
+  AND _TABLE_SUFFIX BETWEEN FORMAT_DATE("%Y%m%d",
+    DATE_SUB(CURRENT_DATE(),
+      INTERVAL 7 DAY))
+  AND FORMAT_DATE("%Y%m%d",
+    CURRENT_DATE())
+  AND REGEXP_CONTAINS(LOWER(protopayload_auditlog.servicedata_v1_bigquery.jobCompletedEvent.job.jobConfiguration.query.query),
+    r'^select \*')
+ORDER BY
+  3 DESC
 ```
