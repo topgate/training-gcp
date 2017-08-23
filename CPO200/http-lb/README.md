@@ -259,6 +259,13 @@ gcloud compute firewall-rules create allow-http-lb-health-check \
     --target-tags http-server \
     --allow tcp:80
 ```
+## Tips
+
+### AvailabilityのためのTips
+
+* Instance Groupには複数インスタンスを用意しておく
+* 複数リージョンのInstance GroupをLoad Balancerに接続しておく
+
 ## CleanUp
 
 [cleanup.sh](https://github.com/topgate/training-gcp/blob/master/CPO200/http-lb/cleanup.sh)
