@@ -89,7 +89,7 @@ gsutil cat gs://{your bucket}demo1/composite.txt
 2
 ```
 
-composeできる数は1024という制限があります。
+composeできる数は32という制限があります。
 composeされている数はmeta情報のComponent-Countの値を見ることが分かります。
 
 ```
