@@ -89,8 +89,10 @@ gsutil cat gs://{your bucket}demo1/composite.txt
 2
 ```
 
-composeできる数は32という制限があります。
+新しいオブジェクト内に最大 32 個の既存のオブジェクトを作成することができます。
+複合オブジェクトを使って更に複合オブジェクトを作成できますが、composeできる数は1024という制限があります。
 composeされている数はmeta情報のComponent-Countの値を見ることが分かります。
+https://cloud.google.com/storage/docs/composite-objects?hl=ja
 
 ```
 gsutil ls -L gs://{your bucket}demo1/composite.txt
